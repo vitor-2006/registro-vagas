@@ -1,6 +1,6 @@
 import { Vaga } from "./schema.js"
 
-export const getVaga = async (req, res) => {
+export const getVaga = async () => {
     try {
         return await Vaga.find()
     } catch (error) {
