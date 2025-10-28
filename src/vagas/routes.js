@@ -4,10 +4,11 @@ import { createVaga } from './post.js';
 import { updateVaga } from "./put.js"
 import { deleteVaga } from './delete.js';
 import { pesqPorStack, pesqPorNivel } from './pesquisa.js'
+import { middleWare } from '../middleware/authentication.js';
 
 const routesVaga  = express.Router();
 
-routesVaga.get('/vaga', async (req, res) => {
+routesVaga.get('/vaga', middleWare, async (req, res) => {
     const Vagas = await getVaga()
     if(Vagas) {
         return res.status(200).send(Vagas)
@@ -16,7 +17,7 @@ routesVaga.get('/vaga', async (req, res) => {
     }
 });
 
-routesVaga.post('/vaga', async (req, res) => {
+routesVaga.post('/vaga', middleWare, async (req, res) => {
     const { titulo, stack, nivel } = req.body
     const newVaga = await createVaga(titulo, stack, nivel)
     if(!newVaga) {
@@ -25,7 +26,7 @@ routesVaga.post('/vaga', async (req, res) => {
     return res.status(201).send({ message: 'Vaga criada com sucesso', vaga: newVaga })
 });
 
-routesVaga.put('/vaga/:id', async (req, res) => {
+routesVaga.put('/vaga/:id', middleWare, async (req, res) => {
     const { id } = req.params
     const { titulo, stack, nivel } = req.body
     const updatedVaga = await updateVaga(id, titulo, stack, nivel)
@@ -36,7 +37,7 @@ routesVaga.put('/vaga/:id', async (req, res) => {
     }
 });
 
-routesVaga.delete('/vaga/:id', async (req, res) => {
+routesVaga.delete('/vaga/:id', middleWare, async (req, res) => {
     const { id } = req.params
     const deletedVaga = deleteVaga(id)
     if(deletedVaga) {
@@ -46,7 +47,7 @@ routesVaga.delete('/vaga/:id', async (req, res) => {
     }
 });
 
-routesVaga.get('/vaga/search', async (req, res) => {
+routesVaga.get('/vaga/search', middleWare, async (req, res) => {
     const { stack, nivel } = req.query
     let searchVaga 
     if(stack) {
